@@ -1,11 +1,13 @@
 package dev.borges.BarberTech.dto;
+import lombok.Data;
 
-public record ClienteRequestDTO(
+@Data
+public class ClienteRequestDTO{
 
-       String nome,
-       String email,
-       String telefone,
-       String cpf
+    private String nome;
+    private String email;
+    private  String telefone;
+    private String cpf;
 
-) {
+
 }

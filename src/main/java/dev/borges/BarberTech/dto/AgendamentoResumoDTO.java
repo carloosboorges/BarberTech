@@ -1,14 +1,13 @@
 package dev.borges.BarberTech.dto;
-
 import dev.borges.BarberTech.enums.StatusAgendamento;
-
 import java.time.LocalDateTime;
-public record AgendamentoResumoDTO(
 
-        Long id,
-        LocalDateTime dataHora,
-        String barbeiroNome,
-        String servicoOuCombo,
-        StatusAgendamento status
-) {
+public class AgendamentoResumoDTO {
+
+    private Long id;
+    private LocalDateTime dataHora;
+    private String barbeiroNome;
+    private String servicoOuCombo;
+    private StatusAgendamento status;
+
 }
