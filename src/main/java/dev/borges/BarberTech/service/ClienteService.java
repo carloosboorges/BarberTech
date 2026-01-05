@@ -49,9 +49,9 @@ public class ClienteService {
 
     }
 
-    public ClienteResponseDTO alterarCliente(ClienteRequestDTO request, Long id){
+    public ClienteResponseDTO alterarCliente(Long id, ClienteRequestDTO request){
         ClienteModel cliente = clienteRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Cliente com "+ id + "não encontrado."));
+                .orElseThrow(() -> new EntityNotFoundException("Cliente com ID "+ id + "não encontrado."));
 
         if (!cliente.getCpf().equals(request.getCpf())
             && clienteRepository.existsByCpf(request.getCpf())){
@@ -69,7 +69,13 @@ public class ClienteService {
 
         return clienteMapper.toResponse(clienteSalvo);
 
+    }
 
+    public void deletarCliente(Long id){
+        ClienteModel cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cliente com ID " + id + " não Encontrado" ));
+
+        clienteRepository.delete(cliente);
 
     }
 

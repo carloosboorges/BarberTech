@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,6 +31,4 @@ public class ClienteModel {
     @OneToMany(mappedBy = "cliente")
     private List<AgendamentoModel> agendamentos;
 
-    public void map() {
-    }
 }
