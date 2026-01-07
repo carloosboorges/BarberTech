@@ -1,5 +1,4 @@
 package dev.borges.BarberTech.exception;
-
 import dev.borges.BarberTech.dto.ErroResponseDTO;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
