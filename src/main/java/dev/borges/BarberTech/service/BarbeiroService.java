@@ -1,11 +1,16 @@
 package dev.borges.BarberTech.service;
+
 import dev.borges.BarberTech.dto.BarbeiroRequestDTO;
 import dev.borges.BarberTech.dto.BarbeiroResponseDTO;
 import dev.borges.BarberTech.entity.BarbeiroModel;
 import dev.borges.BarberTech.mapper.BarbeiroMapper;
 import dev.borges.BarberTech.repository.BarbeiroRepository;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BarbeiroService {
@@ -18,17 +23,59 @@ public class BarbeiroService {
         this.barbeiroRepository = barbeiroRepository;
     }
 
-    public BarbeiroResponseDTO adicionarBarbeiro(BarbeiroRequestDTO novoBarbeiro){
+    public BarbeiroResponseDTO adicionarBarbeiro(BarbeiroRequestDTO novoBarbeiro) {
 
-        if(barbeiroRepository.existsByCpf(novoBarbeiro.getCpf())){
+        if (barbeiroRepository.existsByCpf(novoBarbeiro.getCpf())) {
             throw new EntityExistsException("CPF já cadastrado.");
         }
-
-        if(barbeiroRepository.existsByEmail(novoBarbeiro.getEmail())){
+        if (barbeiroRepository.existsByEmail(novoBarbeiro.getEmail())) {
             throw new EntityExistsException("Email ja cadastrado");
         }
-
         BarbeiroModel barbeiro = barbeiroMapper.toModel(novoBarbeiro);
         return barbeiroMapper.toResponse(barbeiroRepository.save(barbeiro));
     }
+
+    public List<BarbeiroResponseDTO> listarBarbeiro() {
+        List<BarbeiroModel> barbeiros = barbeiroRepository.findAll();
+        return barbeiros.stream()
+                .map(barbeiroMapper::toResponse)
+                .toList();
+    }
+
+    public BarbeiroResponseDTO listarPorId(Long id) {
+        BarbeiroModel barbeiro = barbeiroRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Barbeiro com ID" + id + " não encontrado"));
+        return barbeiroMapper.toResponse(barbeiro);
+    }
+
+    public BarbeiroResponseDTO atualizarBarbeiro(Long id, BarbeiroRequestDTO request) {
+        BarbeiroModel barbeiro = barbeiroRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Barbeiro com ID" + id + " não encontrado"));
+
+        if (!barbeiro.getEmail().equals(request.getEmail())
+                && barbeiroRepository.existsByEmail(request.getEmail())) {
+            throw new EntityExistsException("Barbeiro com Email já cadastrado.");
+        }
+
+        if (!barbeiro.getCpf().equals(request.getCpf())
+                && barbeiroRepository.existsByCpf(request.getCpf())) {
+            throw new EntityExistsException("Barbeiro com CPF já cadastrado.");
+        }
+
+        barbeiroMapper.updateFromDto(request, barbeiro);
+
+        BarbeiroModel barbeiroSalvo = barbeiroRepository.save(barbeiro);
+
+        return barbeiroMapper.toResponse(barbeiroSalvo);
+    }
+
+    public void deletarBarbeiro(Long id){
+        BarbeiroModel barbeiro = barbeiroRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Barbeiro com ID " + id + " não encontrado"));
+
+        barbeiroRepository.delete(barbeiro);
+    }
+
+
 }
+
