@@ -1,4 +1,5 @@
 package dev.borges.BarberTech.controller;
+
 import dev.borges.BarberTech.dto.BarbeiroRequestDTO;
 import dev.borges.BarberTech.dto.BarbeiroResponseDTO;
 import dev.borges.BarberTech.service.BarbeiroService;
@@ -6,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @RestController
@@ -20,9 +22,39 @@ public class BarbeiroController {
     }
 
     @PostMapping
-    public ResponseEntity<BarbeiroResponseDTO> adicionarBarbeiro(@RequestBody BarbeiroRequestDTO novoBarbeiro){
+    public ResponseEntity<BarbeiroResponseDTO> adicionarBarbeiro(@RequestBody BarbeiroRequestDTO novoBarbeiro) {
         BarbeiroResponseDTO barbeiro = barbeiroService.adicionarBarbeiro(novoBarbeiro);
         return ResponseEntity.status(HttpStatus.CREATED).body(barbeiro);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<BarbeiroResponseDTO>> listarAll() {
+        List<BarbeiroResponseDTO> lista = barbeiroService.listarBarbeiro();
+        if (lista.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok().body(lista);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BarbeiroResponseDTO> ListarPorId(@PathVariable Long id) {
+        BarbeiroResponseDTO barbeiro = barbeiroService.listarPorId(id);
+
+        return ResponseEntity.ok(barbeiro);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BarbeiroResponseDTO> atualizarBarbeiro(@PathVariable Long id, @RequestBody BarbeiroRequestDTO request) {
+        BarbeiroResponseDTO update = barbeiroService.atualizarBarbeiro(id, request);
+
+        return ResponseEntity.ok(update);
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletarBarbeiro(@PathVariable Long id) {
+        barbeiroService.deletarBarbeiro(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
