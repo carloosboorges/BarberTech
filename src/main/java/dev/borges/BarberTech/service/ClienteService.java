@@ -1,6 +1,6 @@
 package dev.borges.BarberTech.service;
-import dev.borges.BarberTech.dto.ClienteRequestDTO;
-import dev.borges.BarberTech.dto.ClienteResponseDTO;
+import dev.borges.BarberTech.dto.request.ClienteRequestDTO;
+import dev.borges.BarberTech.dto.response.ClienteResponseDTO;
 import dev.borges.BarberTech.entity.ClienteModel;
 import dev.borges.BarberTech.mapper.ClienteMapper;
 import dev.borges.BarberTech.repository.ClienteRepository;

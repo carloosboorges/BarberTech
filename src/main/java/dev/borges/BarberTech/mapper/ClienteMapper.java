@@ -1,6 +1,6 @@
 package dev.borges.BarberTech.mapper;
-import dev.borges.BarberTech.dto.ClienteRequestDTO;
-import dev.borges.BarberTech.dto.ClienteResponseDTO;
+import dev.borges.BarberTech.dto.request.ClienteRequestDTO;
+import dev.borges.BarberTech.dto.response.ClienteResponseDTO;
 import dev.borges.BarberTech.entity.ClienteModel;
 import org.mapstruct.*;
 @Mapper(componentModel = "spring")

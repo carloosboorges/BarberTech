@@ -1,6 +1,6 @@
 package dev.borges.BarberTech.mapper;
-import dev.borges.BarberTech.dto.BarbeiroRequestDTO;
-import dev.borges.BarberTech.dto.BarbeiroResponseDTO;
+import dev.borges.BarberTech.dto.request.BarbeiroRequestDTO;
+import dev.borges.BarberTech.dto.response.BarbeiroResponseDTO;
 import dev.borges.BarberTech.entity.BarbeiroModel;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

@@ -1,7 +1,7 @@
 package dev.borges.BarberTech.controller;
 
-import dev.borges.BarberTech.dto.BarbeiroRequestDTO;
-import dev.borges.BarberTech.dto.BarbeiroResponseDTO;
+import dev.borges.BarberTech.dto.request.BarbeiroRequestDTO;
+import dev.borges.BarberTech.dto.response.BarbeiroResponseDTO;
 import dev.borges.BarberTech.service.BarbeiroService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

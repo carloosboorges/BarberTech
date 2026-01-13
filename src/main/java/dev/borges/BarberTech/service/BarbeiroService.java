@@ -1,7 +1,7 @@
 package dev.borges.BarberTech.service;
 
-import dev.borges.BarberTech.dto.BarbeiroRequestDTO;
-import dev.borges.BarberTech.dto.BarbeiroResponseDTO;
+import dev.borges.BarberTech.dto.request.BarbeiroRequestDTO;
+import dev.borges.BarberTech.dto.response.BarbeiroResponseDTO;
 import dev.borges.BarberTech.entity.BarbeiroModel;
 import dev.borges.BarberTech.mapper.BarbeiroMapper;
 import dev.borges.BarberTech.repository.BarbeiroRepository;
@@ -10,7 +10,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BarbeiroService {

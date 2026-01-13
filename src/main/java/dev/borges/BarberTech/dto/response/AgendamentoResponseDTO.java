@@ -1,8 +1,8 @@
-package dev.borges.BarberTech.dto;
+package dev.borges.BarberTech.dto.response;
 import dev.borges.BarberTech.enums.StatusAgendamento;
 import java.time.LocalDateTime;
 
-public class AgendamentoResumoDTO {
+public class AgendamentoResponseDTO {
 
     private Long id;
     private LocalDateTime dataHora;

@@ -1,5 +1,5 @@
 package dev.borges.BarberTech.exception;
-import dev.borges.BarberTech.dto.ErroResponseDTO;
+import dev.borges.BarberTech.dto.response.ErroResponseDTO;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;

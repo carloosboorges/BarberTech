@@ -1,4 +1,4 @@
-package dev.borges.BarberTech.dto;
+package dev.borges.BarberTech.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
