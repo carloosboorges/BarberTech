@@ -1,6 +1,7 @@
 package dev.borges.BarberTech.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Table(name = "produto_tb")
 public class ProdutoModel {
 
@@ -18,9 +20,6 @@ public class ProdutoModel {
 
     @Column(name = "nome", nullable = false)
     private String nome;
-
-    @Column(name = "telefone")
-    private String telefone;
 
     @Column(name = "categoria")
     private String categoria;

@@ -1,7 +1,11 @@
 package dev.borges.BarberTech.dto.response;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BarbeiroResponseDTO {
 
     private Long id;

@@ -2,12 +2,14 @@ package dev.borges.BarberTech.entity;
 import dev.borges.BarberTech.enums.StatusAgendamento;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Table(name = "agendamento_tb")
 public class AgendamentoModel {
 

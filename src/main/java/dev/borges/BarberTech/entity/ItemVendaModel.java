@@ -1,11 +1,13 @@
 package dev.borges.BarberTech.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Table(name = "item_venda_tb")
 public class ItemVendaModel {
 
