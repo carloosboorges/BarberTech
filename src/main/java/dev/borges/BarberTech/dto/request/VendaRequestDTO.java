@@ -11,7 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 public class VendaRequestDTO {
 
-    private LocalDate data;
     private Long clienteId;
     private List<ItemVendaRequestDTO> itens;
 

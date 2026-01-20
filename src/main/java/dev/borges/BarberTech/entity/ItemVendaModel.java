@@ -33,4 +33,6 @@ public class ItemVendaModel {
     @ManyToOne
     @JoinColumn(name = "venda_id")
     private VendaModel venda;
+
+
 }
