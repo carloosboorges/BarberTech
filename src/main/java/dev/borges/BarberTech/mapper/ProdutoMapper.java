@@ -15,5 +15,5 @@ public interface ProdutoMapper {
     ProdutoResponseDTO toResponse (ProdutoModel model);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateFromDto(ProdutoResponseDTO dto, @MappingTarget ProdutoModel model);
+    void updateFromDto(ProdutoRequestDTO dto, @MappingTarget ProdutoModel model);
 }
