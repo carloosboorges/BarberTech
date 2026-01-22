@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class VendaService {
@@ -83,5 +83,43 @@ public class VendaService {
                 null
         );
     }
+
+    public List<VendaResponseDTO> listarTodas(){
+        List<VendaModel> vendas = vendaRepository.findAll();
+
+        return vendas.stream()
+                .map(vendaMapper::toResponse)
+                .toList();
+    }
+
+    public VendaResponseDTO listarPorId(Long id){
+        VendaModel venda = vendaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Venda com ID " + id + "não encontrada"));
+
+       return vendaMapper.toResponse(venda);
+    }
+
+    public List<VendaResponseDTO> listarVendaPorCliente (Long clienteId){
+       clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new EntityNotFoundException("Cliente com ID " + clienteId + " não encontrado"));
+
+        List<VendaModel> vendas = vendaRepository.findByClienteId(clienteId);
+
+        return vendas.stream()
+                .map(vendaMapper::toResponse)
+                .toList();
+    }
+    public List<VendaResponseDTO> listarVendaPorData(LocalDate data){
+
+        LocalDateTime inicio = data.atStartOfDay();
+        LocalDateTime fim = data.atTime(LocalTime.MAX);
+
+        return vendaRepository
+                .findByDataBetween(inicio, fim)
+                .stream()
+                .map(vendaMapper::toResponse)
+                .toList();
+    }
+
 
 }
