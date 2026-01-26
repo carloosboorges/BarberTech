@@ -7,6 +7,7 @@ import dev.borges.BarberTech.entity.ClienteModel;
 import dev.borges.BarberTech.entity.ItemVendaModel;
 import dev.borges.BarberTech.entity.ProdutoModel;
 import dev.borges.BarberTech.entity.VendaModel;
+import dev.borges.BarberTech.enums.StatusVenda;
 import dev.borges.BarberTech.mapper.VendaMapper;
 import dev.borges.BarberTech.repository.ClienteRepository;
 import dev.borges.BarberTech.repository.ProdutoRepository;
@@ -58,6 +59,7 @@ public class VendaService {
                 null,
                 LocalDateTime.now(),
                 total,
+                StatusVenda.FINALIZADA,
                 cliente,
                 itens
         );
@@ -116,6 +118,32 @@ public class VendaService {
 
         return vendaRepository
                 .findByDataBetween(inicio, fim)
+                .stream()
+                .map(vendaMapper::toResponse)
+                .toList();
+    }
+
+    public VendaResponseDTO cancelarVenda(Long vendaId){
+        VendaModel venda = vendaRepository.findById(vendaId)
+                .orElseThrow(() -> new EntityNotFoundException("Venda com ID " + vendaId + " não encontrada." ));
+
+                if(venda.getStatus() == StatusVenda.CANCELADA){
+                    throw new IllegalArgumentException("Venda já está cancelada.");
+                }
+
+                venda.setStatus(StatusVenda.CANCELADA);
+
+                for(ItemVendaModel item : venda.getItens()){
+                    ProdutoModel produto = item.getProduto();
+
+                    produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() + item.getQuantidade());
+                }
+
+                return vendaMapper.toResponse(vendaRepository.save(venda));
+    }
+
+    public List<VendaResponseDTO> listarPorStatus(StatusVenda status){
+        return vendaRepository.findByStatus(status)
                 .stream()
                 .map(vendaMapper::toResponse)
                 .toList();

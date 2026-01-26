@@ -1,5 +1,6 @@
 package dev.borges.BarberTech.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import dev.borges.BarberTech.enums.StatusVenda;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,9 +29,15 @@ public class VendaModel {
     @Column(name = "valor_total", nullable = false)
     private Double valorTotal;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusVenda status;
+
     @ManyToOne
     private ClienteModel cliente;
 
     @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
     private List<ItemVendaModel> itens;
+
+
 }

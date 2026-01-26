@@ -16,5 +16,6 @@ public class VendaResponseDTO {
     private LocalDateTime data;
     private String clienteNome;
     private Double valorTotal;
+    private String status;
     private List<ItemVendaResponseDTO> itens;
 }
