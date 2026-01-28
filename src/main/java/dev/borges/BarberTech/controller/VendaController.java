@@ -1,5 +1,4 @@
 package dev.borges.BarberTech.controller;
-
 import dev.borges.BarberTech.dto.request.VendaRequestDTO;
 import dev.borges.BarberTech.dto.response.VendaResponseDTO;
 import dev.borges.BarberTech.enums.StatusVenda;
