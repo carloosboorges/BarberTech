@@ -6,7 +6,6 @@ import dev.borges.BarberTech.entity.ServicoModel;
 import dev.borges.BarberTech.mapper.ComboMapper;
 import dev.borges.BarberTech.repository.ComboRepository;
 import dev.borges.BarberTech.repository.ServicoRepository;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,15 +36,28 @@ public class ComboService {
             throw new IllegalArgumentException("Um ou mais seriviços não encontrado.");
         }
 
+        double valorOriginal = servicos.stream()
+                .mapToDouble(ServicoModel::getValor)
+                .sum();
+
+        double valorComDesconto = valorOriginal - (valorOriginal * 0.10);
+
         ComboModel combo = new ComboModel(
                 null,
                 request.getNome(),
-                request.getValor(),
+                valorComDesconto,
                 servicos,
                 null
         );
 
-        return comboMapper.toResponse(comboRepository.save(combo));
+        ComboModel comboSalvo = comboRepository.save(combo);
+
+        ComboResponseDTO response = comboMapper.toResponse(comboSalvo);
+
+        response.setValorOriginal(valorOriginal);
+        response.setValorComDesconto(valorComDesconto);
+
+        return response;
 
     }
 }

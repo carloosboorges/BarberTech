@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ServicoResumoMapper {
 
-    @Mapping(source = "nomeServico", target = "nome")
+    @Mapping(source = "nomeServico", target = "nomeServico")
     ServicoResumoDTO toResumo(ServicoModel model);
 }
 

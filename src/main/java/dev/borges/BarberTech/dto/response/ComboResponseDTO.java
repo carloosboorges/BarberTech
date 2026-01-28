@@ -8,7 +8,9 @@ public class ComboResponseDTO {
 
     private Long id;
     private String nome;
-    private Double valor;
+
+    private Double valorOriginal;
+    private Double valorComDesconto;
     private List<ServicoResumoDTO> servicos;
 
 }

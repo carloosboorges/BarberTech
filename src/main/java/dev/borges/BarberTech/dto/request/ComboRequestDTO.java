@@ -7,6 +7,5 @@ import java.util.List;
 public class ComboRequestDTO {
 
     private String nome;
-    private Double valor;
     private List<Long> servicoIds;
 }
