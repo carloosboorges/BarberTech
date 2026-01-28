@@ -2,10 +2,9 @@ package dev.borges.BarberTech.controller;
 
 import dev.borges.BarberTech.dto.request.VendaRequestDTO;
 import dev.borges.BarberTech.dto.response.VendaResponseDTO;
-import dev.borges.BarberTech.repository.VendaRepository;
+import dev.borges.BarberTech.enums.StatusVenda;
 import dev.borges.BarberTech.service.VendaService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +16,9 @@ import java.util.List;
 public class VendaController {
 
     private final VendaService vendaService;
-    private final VendaRepository vendaRepository;
 
-    public VendaController(VendaService vendaService, VendaRepository vendaRepository) {
+    public VendaController(VendaService vendaService) {
         this.vendaService = vendaService;
-        this.vendaRepository = vendaRepository;
     }
 
     @PostMapping
@@ -64,5 +61,15 @@ public class VendaController {
     public ResponseEntity<List<VendaResponseDTO>> listarPorData(@RequestParam LocalDate data){
         List<VendaResponseDTO> vendas = vendaService.listarVendaPorData(data);
         return ResponseEntity.ok(vendas);
+    }
+
+    @PutMapping("/{id}/cancelar")
+    public ResponseEntity<VendaResponseDTO> cancelarVenda(@PathVariable Long id){
+        return ResponseEntity.ok(vendaService.cancelarVenda(id));
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<VendaResponseDTO>> listarVendaPorStatus(@PathVariable String status){
+        return ResponseEntity.ok(vendaService.listarPorStatus(StatusVenda.from(status)));
     }
 }

@@ -11,6 +11,7 @@ import org.mapstruct.Mapping;
 public interface VendaMapper {
 
     @Mapping(target = "clienteNome", source = "cliente.nome")
+    @Mapping(target = "status", expression = "java(model.getStatus().name())")
     VendaResponseDTO toResponse(VendaModel model);
 
     @Mapping(target = "produtoNome", source = "produto.nome")
