@@ -2,6 +2,7 @@ package dev.borges.BarberTech.controller;
 
 import dev.borges.BarberTech.dto.request.ComboRequestDTO;
 import dev.borges.BarberTech.dto.response.ComboResponseDTO;
+import dev.borges.BarberTech.enums.StatusCombo;
 import dev.borges.BarberTech.repository.ComboRepository;
 import dev.borges.BarberTech.service.ComboService;
 import org.springframework.http.HttpStatus;
@@ -15,11 +16,9 @@ import java.util.List;
 public class ComboController {
 
     private final ComboService comboService;
-    private final ComboRepository comboRepository;
 
-    public ComboController(ComboService comboService, ComboRepository comboRepository) {
+    public ComboController(ComboService comboService) {
         this.comboService = comboService;
-        this.comboRepository = comboRepository;
     }
 
     @PostMapping()
@@ -46,6 +45,11 @@ public class ComboController {
         return ResponseEntity.ok(combo);
     }
 
+    @GetMapping("status/{status}")
+    public ResponseEntity<List<ComboResponseDTO>> buscarPorStatus(@PathVariable String status){
+        return ResponseEntity.ok(comboService.buscarPorStatus(StatusCombo.from(status)));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ComboResponseDTO> atualizarCombo(@PathVariable Long id, @RequestBody ComboRequestDTO request){
         ComboResponseDTO combo = comboService.atualizarCombo(id, request);
@@ -57,5 +61,7 @@ public class ComboController {
     public ResponseEntity<ComboResponseDTO> inativarCombo(@PathVariable Long id) {
         return ResponseEntity.ok(comboService.inativarCombo(id));
     }
+
+
 
 }
