@@ -36,10 +36,7 @@ public class ClienteService {
 
     public List<ClienteResponseDTO> listarClientes(){
         List<ClienteModel> cliente = clienteRepository.findAll();
-        return clienteRepository.findAll()
-                .stream()
-                .map(clienteMapper::toResponse)
-                .toList();
+        return clienteMapper.toResponseList(cliente);
     }
 
     public ClienteResponseDTO listarPorId(Long id){
