@@ -1,4 +1,5 @@
 package dev.borges.BarberTech.service;
+
 import dev.borges.BarberTech.dto.request.AgendamentoRequestDTO;
 import dev.borges.BarberTech.dto.response.AgendamentoResponseDTO;
 import dev.borges.BarberTech.entity.*;
@@ -7,6 +8,9 @@ import dev.borges.BarberTech.mapper.AgendamentoMapper;
 import dev.borges.BarberTech.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class AgendamentoService {
@@ -86,5 +90,87 @@ public class AgendamentoService {
 
         return agendamentoMapper.toResponse(salvo);
     }
+
+    public List<AgendamentoResponseDTO> listarAgendamentos() {
+        List<AgendamentoModel> agendamento = agendamentoRepository.findAll();
+
+        return agendamentoMapper.toResponseList(agendamento);
+    }
+
+    public AgendamentoResponseDTO listarPorId(Long id) {
+        AgendamentoModel agendamento = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Agendamento com ID: " + id + " não encontrado"));
+
+        return agendamentoMapper.toResponse(agendamento);
+
+    }
+
+    public AgendamentoResponseDTO atualizarAgendamento(Long id, AgendamentoRequestDTO request) {
+
+        AgendamentoModel agendamnetoEncontrado = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Agendamentoc com ID " + id + " não encontrado."));
+
+        if (agendamnetoEncontrado.getStatus() == StatusAgendamento.CANCELADO) {
+            throw new IllegalArgumentException("O agendamento já foi cancelado e não pode ser alterado.");
+        }
+
+        if (agendamnetoEncontrado.getStatus() == StatusAgendamento.REALIZADO) {
+            throw new IllegalArgumentException("O agendamento ja foi realizado e não pode ser alterado.");
+        }
+
+        if (request.getBarbeiroId() != null) {
+
+            BarbeiroModel novoBarbeiro = barbeiroRepository
+                    .findById(request.getBarbeiroId())
+                    .orElseThrow(() -> new EntityNotFoundException("Barbeiro com ID " + request.getBarbeiroId() + " não encontrado."));
+
+            if (!novoBarbeiro.isAtivo()) {
+                throw new IllegalArgumentException("Barbeiro está inativo.");
+            }
+
+            agendamnetoEncontrado.setBarbeiro(novoBarbeiro);
+        }
+
+        if (request.getDataHora() != null) {
+
+            if (request.getDataHora().isBefore(LocalDateTime.now())) {
+                throw new IllegalArgumentException("Não é permitido agendar para uma data/hora no passado.");
+            }
+
+            agendamnetoEncontrado.setDataHora(request.getDataHora());
+        }
+
+        if (agendamnetoEncontrado.getServico() != null && request.getComboId() != null) {
+            throw new IllegalArgumentException("Não é possitvel alterar de SERVIÇO para COMBO, cancele o agendamento e refaça.");
+        }
+
+        if (agendamnetoEncontrado.getCombo() != null && request.getServicoId() != null) {
+            throw new IllegalArgumentException("Não é possitvel alterar de COMBO para SERVIÇO, cancele o agendamento e refaça.");
+
+        }
+
+        if(agendamnetoEncontrado.getServico() != null && request.getServicoId() != null){
+
+            ServicoModel servico = servicoRepository.findById(request.getServicoId())
+                    .orElseThrow(() -> new EntityNotFoundException("Serviço com ID " + request.getServicoId() + " não existe."));
+
+            agendamnetoEncontrado.setServico(servico);
+        }
+
+        if(agendamnetoEncontrado.getCombo() != null && request.getComboId() != null){
+
+            ComboModel combo = comboRepository.findById(request.getComboId())
+                                .orElseThrow(() -> new EntityNotFoundException("Serviço com ID " + request.getServicoId() + " não existe."));
+
+            agendamnetoEncontrado.setCombo(combo);
+        }
+
+        AgendamentoModel agendamantoSalvo = agendamentoRepository.save(agendamnetoEncontrado);
+
+        return agendamentoMapper.toResponse(agendamantoSalvo);
+
+
+    }
+
 
 }
