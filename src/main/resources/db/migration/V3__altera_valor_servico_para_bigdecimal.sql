@@ -1,0 +1,2 @@
+ALTER TABLE servico_tb
+ALTER COLUMN valor DECIMAL(10,2);
