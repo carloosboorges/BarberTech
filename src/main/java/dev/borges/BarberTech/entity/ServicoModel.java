@@ -3,6 +3,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -19,8 +21,8 @@ public class ServicoModel {
     @Column(name = "nome_servico")
     private String nomeServico;
 
-    @Column(name = "valor")
-    double valor;
+    @Column(name = "valor", precision = 10, scale = 2)
+    private BigDecimal valor;
 
     @Column(name = "duracao_estimada_minutos")
     private int duracaoEstimadaMinutos;

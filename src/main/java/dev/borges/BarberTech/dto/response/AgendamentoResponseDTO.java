@@ -13,8 +13,13 @@ public class AgendamentoResponseDTO {
 
     private Long id;
     private LocalDateTime dataHora;
-    private String barbeiroNome;
-    private String servicoOuCombo;
     private StatusAgendamento status;
+
+    private String clienteNome;
+    private String barbeiroNome;
+
+    private String servicoNome;
+    private String comboNome;
+
 
 }

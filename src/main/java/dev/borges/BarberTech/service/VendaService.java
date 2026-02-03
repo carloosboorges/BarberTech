@@ -86,7 +86,7 @@ public class VendaService {
         );
     }
 
-    public List<VendaResponseDTO> listarTodas(){
+    public List<VendaResponseDTO> listarTodas() {
         List<VendaModel> vendas = vendaRepository.findAll();
 
         return vendas.stream()
@@ -94,15 +94,15 @@ public class VendaService {
                 .toList();
     }
 
-    public VendaResponseDTO listarPorId(Long id){
+    public VendaResponseDTO listarPorId(Long id) {
         VendaModel venda = vendaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Venda com ID " + id + "não encontrada"));
 
-       return vendaMapper.toResponse(venda);
+        return vendaMapper.toResponse(venda);
     }
 
-    public List<VendaResponseDTO> listarVendaPorCliente (Long clienteId){
-       clienteRepository.findById(clienteId)
+    public List<VendaResponseDTO> listarVendaPorCliente(Long clienteId) {
+        clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new EntityNotFoundException("Cliente com ID " + clienteId + " não encontrado"));
 
         List<VendaModel> vendas = vendaRepository.findByClienteId(clienteId);
@@ -111,7 +111,8 @@ public class VendaService {
                 .map(vendaMapper::toResponse)
                 .toList();
     }
-    public List<VendaResponseDTO> listarVendaPorData(LocalDate data){
+
+    public List<VendaResponseDTO> listarVendaPorData(LocalDate data) {
 
         LocalDateTime inicio = data.atStartOfDay();
         LocalDateTime fim = data.atTime(LocalTime.MAX);
@@ -123,31 +124,31 @@ public class VendaService {
                 .toList();
     }
 
-    public VendaResponseDTO cancelarVenda(Long vendaId){
-        VendaModel venda = vendaRepository.findById(vendaId)
-                .orElseThrow(() -> new EntityNotFoundException("Venda com ID " + vendaId + " não encontrada." ));
-
-                if(venda.getStatus() == StatusVenda.CANCELADA){
-                    throw new IllegalArgumentException("Venda já está cancelada.");
-                }
-
-                venda.setStatus(StatusVenda.CANCELADA);
-
-                for(ItemVendaModel item : venda.getItens()){
-                    ProdutoModel produto = item.getProduto();
-
-                    produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() + item.getQuantidade());
-                }
-
-                return vendaMapper.toResponse(vendaRepository.save(venda));
-    }
-
-    public List<VendaResponseDTO> listarPorStatus(StatusVenda status){
+    public List<VendaResponseDTO> listarPorStatus(StatusVenda status) {
         return vendaRepository.findByStatus(status)
                 .stream()
                 .map(vendaMapper::toResponse)
                 .toList();
     }
 
+
+    public VendaResponseDTO cancelarVenda(Long vendaId) {
+        VendaModel venda = vendaRepository.findById(vendaId)
+                .orElseThrow(() -> new EntityNotFoundException("Venda com ID " + vendaId + " não encontrada."));
+
+        if (venda.getStatus() == StatusVenda.CANCELADA) {
+            throw new IllegalArgumentException("Venda já está cancelada.");
+        }
+
+        venda.setStatus(StatusVenda.CANCELADA);
+
+        for (ItemVendaModel item : venda.getItens()) {
+            ProdutoModel produto = item.getProduto();
+
+            produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() + item.getQuantidade());
+        }
+
+        return vendaMapper.toResponse(vendaRepository.save(venda));
+    }
 
 }
