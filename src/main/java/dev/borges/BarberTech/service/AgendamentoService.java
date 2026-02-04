@@ -52,7 +52,7 @@ public class AgendamentoService {
         agendamento.setBarbeiro(barbeiro);
         agendamento.setStatus(StatusAgendamento.AGENDADO);
 
-        // 4️⃣ Serviço OU Combo (regra mais importante)
+        // 4️⃣ Serviço OU Combo
         if (request.getServicoId() != null && request.getComboId() != null) {
             throw new IllegalArgumentException(
                     "Informe apenas serviço OU combo, não os dois."
@@ -105,10 +105,15 @@ public class AgendamentoService {
 
     }
 
+    public List<AgendamentoResponseDTO> listarPorStatus(StatusAgendamento status) {
+        List<AgendamentoModel> agendamento = agendamentoRepository.findByStatus(status);
+        return agendamentoMapper.toResponseList(agendamento);
+    }
+
     public AgendamentoResponseDTO atualizarAgendamento(Long id, AgendamentoRequestDTO request) {
 
         AgendamentoModel agendamnetoEncontrado = agendamentoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Agendamentoc com ID " + id + " não encontrado."));
+                .orElseThrow(() -> new EntityNotFoundException("Agendamento com ID " + id + " não encontrado."));
 
         if (agendamnetoEncontrado.getStatus() == StatusAgendamento.CANCELADO) {
             throw new IllegalArgumentException("O agendamento já foi cancelado e não pode ser alterado.");
@@ -149,7 +154,7 @@ public class AgendamentoService {
 
         }
 
-        if(agendamnetoEncontrado.getServico() != null && request.getServicoId() != null){
+        if (agendamnetoEncontrado.getServico() != null && request.getServicoId() != null) {
 
             ServicoModel servico = servicoRepository.findById(request.getServicoId())
                     .orElseThrow(() -> new EntityNotFoundException("Serviço com ID " + request.getServicoId() + " não existe."));
@@ -157,17 +162,58 @@ public class AgendamentoService {
             agendamnetoEncontrado.setServico(servico);
         }
 
-        if(agendamnetoEncontrado.getCombo() != null && request.getComboId() != null){
+        if (agendamnetoEncontrado.getCombo() != null && request.getComboId() != null) {
 
             ComboModel combo = comboRepository.findById(request.getComboId())
-                                .orElseThrow(() -> new EntityNotFoundException("Serviço com ID " + request.getServicoId() + " não existe."));
+                    .orElseThrow(() -> new EntityNotFoundException("Serviço com ID " + request.getServicoId() + " não existe."));
 
             agendamnetoEncontrado.setCombo(combo);
+        }
+
+        if (agendamnetoEncontrado.getStatus() == StatusAgendamento.AGENDADO
+                && agendamnetoEncontrado.getDataHora().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Agendamento AGENDADO não pode ficar com data hora no passado.");
         }
 
         AgendamentoModel agendamantoSalvo = agendamentoRepository.save(agendamnetoEncontrado);
 
         return agendamentoMapper.toResponse(agendamantoSalvo);
+
+    }
+
+    public AgendamentoResponseDTO cancelarAgendamento(Long id) {
+        AgendamentoModel agendamnetoEncontrado = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Agendamento com ID " + id + " não encontrado."));
+
+        if (agendamnetoEncontrado.getStatus() == StatusAgendamento.CANCELADO) {
+            throw new IllegalArgumentException("Agendamento ja está cancelado.");
+        }
+
+        if (agendamnetoEncontrado.getStatus() == StatusAgendamento.REALIZADO) {
+            throw new IllegalArgumentException("Não pode cancelar algo que já foi realizado.");
+        }
+
+        agendamnetoEncontrado.setStatus(StatusAgendamento.CANCELADO);
+
+        return agendamentoMapper.toResponse(agendamentoRepository.save(agendamnetoEncontrado));
+    }
+
+    public AgendamentoResponseDTO marcarComoRealizdo(Long id) {
+        AgendamentoModel agendamnetoEncontrado = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Agendamento com ID " + id + " não encontrado."));
+
+        if (agendamnetoEncontrado.getStatus() == StatusAgendamento.CANCELADO) {
+            throw new IllegalArgumentException("Agendamento ja está cancelado.");
+        }
+
+        if (agendamnetoEncontrado.getStatus() == StatusAgendamento.REALIZADO) {
+            throw new IllegalArgumentException("O agendamento já está realizado.");
+        }
+
+        agendamnetoEncontrado.setStatus(StatusAgendamento.REALIZADO);
+
+        return agendamentoMapper.toResponse(agendamentoRepository.save(agendamnetoEncontrado));
+
 
 
     }

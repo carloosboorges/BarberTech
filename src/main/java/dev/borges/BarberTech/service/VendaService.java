@@ -131,6 +131,24 @@ public class VendaService {
                 .toList();
     }
 
+    public VendaResponseDTO marcarComoFinalizada(Long id){
+        VendaModel venda = vendaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Venda com ID " + id + " não encontrada."));
+
+        if(venda.getStatus() == StatusVenda.CANCELADA){
+            throw new IllegalArgumentException("Venda cancelada não pode ser alterada.");
+        }
+
+        if(venda.getStatus() == StatusVenda.FINALIZADA){
+            throw new IllegalArgumentException("Venda já esta finalizada.");
+        }
+
+         venda.setStatus(StatusVenda.FINALIZADA);
+
+        return vendaMapper.toResponse(vendaRepository.save(venda));
+
+    }
+
 
     public VendaResponseDTO cancelarVenda(Long vendaId) {
         VendaModel venda = vendaRepository.findById(vendaId)
