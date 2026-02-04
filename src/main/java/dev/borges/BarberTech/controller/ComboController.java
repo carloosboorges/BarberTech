@@ -5,6 +5,7 @@ import dev.borges.BarberTech.dto.response.ComboResponseDTO;
 import dev.borges.BarberTech.enums.StatusCombo;
 import dev.borges.BarberTech.repository.ComboRepository;
 import dev.borges.BarberTech.service.ComboService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class ComboController {
     }
 
     @PostMapping()
-    public ResponseEntity<ComboResponseDTO> criarCombo(@RequestBody ComboRequestDTO request) {
+    public ResponseEntity<ComboResponseDTO> criarCombo(@RequestBody @Valid ComboRequestDTO request) {
         ComboResponseDTO combo = comboService.criarCombo(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(combo);
@@ -51,7 +52,7 @@ public class ComboController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ComboResponseDTO> atualizarCombo(@PathVariable Long id, @RequestBody ComboRequestDTO request){
+    public ResponseEntity<ComboResponseDTO> atualizarCombo(@PathVariable Long id, @RequestBody @Valid ComboRequestDTO request){
         ComboResponseDTO combo = comboService.atualizarCombo(id, request);
 
         return ResponseEntity.ok(combo);

@@ -67,6 +67,11 @@ public class VendaController {
         return ResponseEntity.ok(vendaService.cancelarVenda(id));
     }
 
+    @PutMapping("/{id}/finalizar")
+    public ResponseEntity<VendaResponseDTO> marcarComoFinalizado(@PathVariable Long id){
+        return ResponseEntity.ok(vendaService.marcarComoFinalizada(id));
+    }
+
     @GetMapping("/status/{status}")
     public ResponseEntity<List<VendaResponseDTO>> listarVendaPorStatus(@PathVariable String status){
         return ResponseEntity.ok(vendaService.listarPorStatus(StatusVenda.from(status)));

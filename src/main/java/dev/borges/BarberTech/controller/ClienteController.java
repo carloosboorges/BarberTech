@@ -2,6 +2,7 @@ package dev.borges.BarberTech.controller;
 import dev.borges.BarberTech.dto.request.ClienteRequestDTO;
 import dev.borges.BarberTech.dto.response.ClienteResponseDTO;
 import dev.borges.BarberTech.service.ClienteService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<ClienteResponseDTO> adicionarCliente(@RequestBody ClienteRequestDTO novoCliente){
+    public ResponseEntity<ClienteResponseDTO> adicionarCliente(@RequestBody @Valid ClienteRequestDTO novoCliente){
         ClienteResponseDTO cliente = clienteService.adicionarCliente(novoCliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(cliente);
     }
@@ -41,7 +42,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteResponseDTO> alterarCliente(@PathVariable Long id, @RequestBody ClienteRequestDTO request){
+    public ResponseEntity<ClienteResponseDTO> alterarCliente(@PathVariable Long id, @RequestBody @Valid ClienteRequestDTO request){
         ClienteResponseDTO cliente = clienteService.alterarCliente(id, request);
         return ResponseEntity.ok(cliente);
     }

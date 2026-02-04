@@ -3,6 +3,7 @@ package dev.borges.BarberTech.controller;
 import dev.borges.BarberTech.dto.request.ServicoRequestDTO;
 import dev.borges.BarberTech.dto.response.ServicoResponseDTO;
 import dev.borges.BarberTech.service.ServicoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class ServicoController {
     }
 
     @PostMapping
-    public ResponseEntity<ServicoResponseDTO> adicionarServico(@RequestBody ServicoRequestDTO servicoRequestDTO) {
+    public ResponseEntity<ServicoResponseDTO> adicionarServico(@RequestBody @Valid ServicoRequestDTO servicoRequestDTO) {
         ServicoResponseDTO servico = servicoService.adicionarServico(servicoRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(servico);
     }
@@ -44,7 +45,7 @@ public class ServicoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ServicoResponseDTO> atualizarServico(@PathVariable Long id, @RequestBody ServicoRequestDTO request){
+    public ResponseEntity<ServicoResponseDTO> atualizarServico(@PathVariable Long id, @RequestBody @Valid ServicoRequestDTO request){
         ServicoResponseDTO servico = servicoService.atualizarServico(id, request);
 
         return ResponseEntity.ok(servico);

@@ -3,6 +3,7 @@ package dev.borges.BarberTech.controller;
 import dev.borges.BarberTech.dto.request.BarbeiroRequestDTO;
 import dev.borges.BarberTech.dto.response.BarbeiroResponseDTO;
 import dev.borges.BarberTech.service.BarbeiroService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class BarbeiroController {
     }
 
     @PostMapping
-    public ResponseEntity<BarbeiroResponseDTO> adicionarBarbeiro(@RequestBody BarbeiroRequestDTO novoBarbeiro) {
+    public ResponseEntity<BarbeiroResponseDTO> adicionarBarbeiro(@RequestBody @Valid BarbeiroRequestDTO novoBarbeiro) {
         BarbeiroResponseDTO barbeiro = barbeiroService.adicionarBarbeiro(novoBarbeiro);
         return ResponseEntity.status(HttpStatus.CREATED).body(barbeiro);
     }
@@ -44,7 +45,7 @@ public class BarbeiroController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BarbeiroResponseDTO> atualizarBarbeiro(@PathVariable Long id, @RequestBody BarbeiroRequestDTO request) {
+    public ResponseEntity<BarbeiroResponseDTO> atualizarBarbeiro(@PathVariable Long id, @RequestBody @Valid BarbeiroRequestDTO request) {
         BarbeiroResponseDTO update = barbeiroService.atualizarBarbeiro(id, request);
 
         return ResponseEntity.ok(update);

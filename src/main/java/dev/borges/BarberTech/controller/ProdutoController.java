@@ -3,6 +3,7 @@ package dev.borges.BarberTech.controller;
 import dev.borges.BarberTech.dto.request.ProdutoRequestDTO;
 import dev.borges.BarberTech.dto.response.ProdutoResponseDTO;
 import dev.borges.BarberTech.service.ProdutoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +44,7 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable Long id, @RequestBody ProdutoRequestDTO requestDTO) {
+    public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable Long id, @RequestBody @Valid ProdutoRequestDTO requestDTO) {
         ProdutoResponseDTO produto = produtoService.atualizarProduto(id, requestDTO);
 
         return ResponseEntity.ok(produto);
