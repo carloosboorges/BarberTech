@@ -16,7 +16,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/barbeiro")
+@RequestMapping("/barbeiros")
 @Tag(name = "Barbeiros", description = "Operações relacionadas á barbeiros")
 public class BarbeiroController {
 

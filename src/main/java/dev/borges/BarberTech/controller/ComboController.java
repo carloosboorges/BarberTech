@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/combo")
+@RequestMapping("/combos")
 @Tag(name = "Combos", description = "Operações relacionadas á combos")
 public class ComboController {
 
