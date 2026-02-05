@@ -1,7 +1,14 @@
 package dev.borges.BarberTech.enums;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Status da venda")
 public enum StatusVenda {
+
+    @Schema(description = "Venda finalizada com sucesso")
     FINALIZADA,
+
+    @Schema(description = "Venda cancelada no sistema")
     CANCELADA;
 
     public static StatusVenda from(String valor) {
@@ -13,7 +20,8 @@ public enum StatusVenda {
             return StatusVenda.valueOf(valor.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(
-                    "Status da venda inválido: " + valor
+                    "Status da venda inválido: " + valor +
+                            ". Valores aceitos: FINALIZADA, CANCELADA"
             );
         }
     }
