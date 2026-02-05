@@ -15,6 +15,8 @@ import dev.borges.BarberTech.repository.VendaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -36,9 +38,13 @@ public class VendaService {
     }
 
     public VendaResponseDTO registrarVenda(VendaRequestDTO request) {
-        ClienteModel cliente = clienteRepository.findById(request.getClienteId())
-                .orElseThrow(() -> new EntityNotFoundException("Cliente com ID " + request.getClienteId() + " não encontrado."));
 
+        ClienteModel cliente = clienteRepository.findById(request.getClienteId())
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "Cliente com ID " + request.getClienteId() + " não encontrado."
+                        )
+                );
 
         if (request.getItens() == null || request.getItens().isEmpty()) {
             throw new IllegalArgumentException("A venda deve conter ao menos 1 item.");
@@ -46,14 +52,15 @@ public class VendaService {
 
         List<ItemVendaModel> itens = request.getItens()
                 .stream()
-                .map(item -> montarItem(item))
+                .map(this::montarItem)
                 .toList();
 
-        double total = itens.stream()
-                .mapToDouble(ItemVendaModel::getSubtotal)
-                .sum();
+        BigDecimal total = itens.stream()
+                .map(ItemVendaModel::getSubtotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        total = Math.round(total * 100.0) / 100.0;
+        // garante 2 casas decimais
+        total = total.setScale(2, RoundingMode.HALF_UP);
 
         VendaModel venda = new VendaModel(
                 null,
@@ -69,18 +76,27 @@ public class VendaService {
         return vendaMapper.toResponse(vendaRepository.save(venda));
     }
 
+
     private ItemVendaModel montarItem(ItemVendaRequestDTO request) {
 
         ProdutoModel produto = produtoRepository.findById(request.getProdutoId())
-                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "Produto com ID " + request.getProdutoId() + " não encontrado."
+                        )
+                );
 
-        double subtotal = produto.getPreco() * request.getQuantidade();
+        BigDecimal precoUnitario = produto.getPreco();
+        BigDecimal quantidade = BigDecimal.valueOf(request.getQuantidade());
+
+        BigDecimal subtotal = precoUnitario.multiply(quantidade)
+                .setScale(2, RoundingMode.HALF_UP);
 
         return new ItemVendaModel(
                 null,
                 request.getQuantidade(),
-                produto.getPreco(),      // precoUnitario
-                produto.getPreco() * request.getQuantidade(), // subtotal
+                precoUnitario,
+                subtotal,
                 produto,
                 null
         );

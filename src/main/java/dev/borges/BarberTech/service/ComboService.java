@@ -135,6 +135,19 @@ public class ComboService {
 
     }
 
+    public ComboResponseDTO ativarCombo(Long id){
+        ComboModel combo = comboRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Combo com ID " + id + " não encontrado." ));
+
+        if(combo.getStatus() == StatusCombo.ATIVO){
+            throw  new IllegalArgumentException("Combo já esta dísponivel.");
+        }
+        combo.setStatus(StatusCombo.ATIVO);
+
+        return comboMapper.toResponse(comboRepository.save(combo));
+
+    }
+
 
 
 }
