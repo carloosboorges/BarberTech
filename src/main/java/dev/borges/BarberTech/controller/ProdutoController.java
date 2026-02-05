@@ -6,6 +6,7 @@ import dev.borges.BarberTech.service.ProdutoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/produtos")
+@Tag(name = "Produtos", description = "Operações relacionadas ás produtos")
 public class ProdutoController {
 
     private final ProdutoService produtoService;
