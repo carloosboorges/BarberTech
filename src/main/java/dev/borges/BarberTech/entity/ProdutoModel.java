@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -24,8 +25,9 @@ public class ProdutoModel {
     @Column(name = "categoria")
     private String categoria;
 
-    @Column(name = "preco", nullable = false)
-    private Double preco;
+    @Column(name = "preco", nullable = false, precision = 10, scale = 2)
+    private BigDecimal preco;
+
 
     @Column(name = "quantidade_estoque", nullable = false)
     private Integer quantidadeEstoque;

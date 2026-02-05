@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,8 +27,8 @@ public class VendaModel {
     @Column(name = "data_venda", nullable = false)
     private LocalDateTime data;
 
-    @Column(name = "valor_total", nullable = false)
-    private Double valorTotal;
+    @Column(name = "valor_total", nullable = false, precision = 10, scale = 2)
+    private BigDecimal valorTotal;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
